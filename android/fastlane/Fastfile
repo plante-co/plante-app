@@ -1,0 +1,8 @@
+default_platform(:android)
+
+platform :android do
+  desc "Build Beta APK"
+  lane :beta do
+    gradle(task: "clean assembleRelease")
+  end
+end
