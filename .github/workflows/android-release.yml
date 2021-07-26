@@ -20,7 +20,7 @@ jobs:
         run: |
           echo "${{secrets.ANDROID_KEYSTORE}}" > plante.asc
           gpg -d --passphrase "${{secrets.KEYSTORE_PASSPHRASE}}" --batch plante.asc > plante.jks
-      - name: Decode keystore
+      - name: Decode key.properties
         working-directory: android
         run: |
           echo "${{secrets.ANDROID_KEY_PROPERTIES}}" > key.properties.asc
