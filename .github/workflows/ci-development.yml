@@ -6,7 +6,7 @@ on:
       - [ skip ci ]
       - [ ci skip ]
   pull_request:
-    branches: [ develop ]
+    branches: [ develop, main, release/** ]
     commit-ignore:
       - [ skip ci ]
       - [ ci skip ]
