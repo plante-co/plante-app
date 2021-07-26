@@ -1,0 +1,42 @@
+name: Planté build test
+on:
+  push:
+    branches: [develop]
+    commit-ignore:
+      - [skip ci]
+      - [ci skip]
+  pull_request:
+    branches: [develop, main, release/**]
+    commit-ignore:
+      - [skip ci]
+      - [ci skip]
+
+jobs:
+  build_apk:
+    name: Distribute beta build with Telegram
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code from ref
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+      - name: Decode keystore
+        working-directory: android/app
+        run: |
+          echo "${{secrets.ANDROID_KEYSTORE}}" > plante.asc
+          gpg -d --passphrase "${{secrets.KEYSTORE_PASSPHRASE}}" --batch plante.asc > plante.jks
+      - name: Decode key.properties
+        working-directory: android
+        run: |
+          echo "${{secrets.ANDROID_KEY_PROPERTIES}}" > key.properties.asc
+          gpg -d --passphrase "${{secrets.KEYSTORE_PASSPHRASE}}" --batch key.properties.asc > key.properties
+      - name: Run Flutter tasks
+        uses: subosito/flutter-action@v1
+        with:
+          flutter-version: "2.2.3"
+      - name: Install dependancies for Flutter
+        run: flutter pub get
+      - name: Flutter build bundle android app
+        run: flutter build appbundle
+      - name: Flutter build without sign
+        run: flutter build ios --release --no-codesign
