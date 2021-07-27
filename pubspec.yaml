@@ -1,6 +1,6 @@
 name: plante
 description: App for plante project
-publish_to: 'none'
+publish_to: "none"
 version: 1.0.0+7
 
 environment:
