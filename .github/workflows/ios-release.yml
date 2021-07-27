@@ -1,7 +1,7 @@
 name: Planté iOS distribute
 on:
   push:
-    branches: [main, release/*, feature/ios-setup-ci]
+    branches: [main, release/*]
     commit-ignore:
       - [skip ci]
       - [ci skip]
