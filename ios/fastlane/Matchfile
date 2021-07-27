@@ -1,4 +1,4 @@
-git_url(ENV['APPLE_MATCH_URI_GIT'])
+git_url(ENV['MATCH_URI_GIT'])
 
 storage_mode("git")
 
