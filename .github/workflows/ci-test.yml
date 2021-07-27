@@ -5,11 +5,6 @@ on:
     commit-ignore:
       - [skip ci]
       - [ci skip]
-  pull_request:
-    branches: [feature/**, hotfix/**]
-    commit-ignore:
-      - [skip ci]
-      - [ci skip]
 
 jobs:
   test:

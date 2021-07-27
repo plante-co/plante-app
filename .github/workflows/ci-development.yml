@@ -1,12 +1,7 @@
 name: Planté build test
 on:
-  push:
-    branches: [develop]
-    commit-ignore:
-      - [skip ci]
-      - [ci skip]
   pull_request:
-    branches: [develop, main, release/**]
+    branches: [develop]
     commit-ignore:
       - [skip ci]
       - [ci skip]
