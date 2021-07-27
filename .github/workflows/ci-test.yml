@@ -2,6 +2,7 @@ name: Planté build test
 on:
   push:
     branches: [feature/**, hotfix/**]
+    branches-ignore: feature/ios-setup-ci # Remove this
     commit-ignore:
       - [skip ci]
       - [ci skip]
