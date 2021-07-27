@@ -1,0 +1,58 @@
+name: Planté iOS distribute
+on:
+  push:
+    branches: [main, release/*, feature/ios-setup-ci]
+    commit-ignore:
+      - [skip ci]
+      - [ci skip]
+
+jobs:
+  deploy_ios:
+    name: Deploy beta build to TestFlight
+    runs-on: macOS-latest
+    steps:
+      - name: Checkout code from ref
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+      - name: Run Flutter tasks
+        uses: subosito/flutter-action@v1
+        with:
+          flutter-version: "2.2.3"
+      - name: Install dependancies for Flutter
+        run: flutter pub get
+      - name: Flutter build without sign
+        run: flutter build ios --release --no-codesign
+      - name: Deploy iOS Beta to TestFlight via Fastlane
+        uses: maierj/fastlane-action@v1.4.0
+        with:
+          lane: beta
+          subdirectory: ios
+        env:
+          MATCH_URI_GIT: "${{ secrets.APPLE_MATCH_URI_GIT }}"
+          MATCH_PASSWORD: "${{ secrets.APPLE_MATCH_PASSWORD }}"
+          FASTLANE_APPLE_ID: "${{ secrets.APPLE_FASTLANE_APPLE_ID }}"
+          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: "${{ secrets.APPLE_FASTLANE_SPECIFIC_PASSWORD }}"
+          TEMP_KEYCHAIN_USER: "${{ secrets.APPLE_TEMP_KEYCHAIN_USER }}"
+          TEMP_KEYCHAIN_PASSWORD: "${{ secrets.APPLE_TEMP_KEYCHAIN_PASSWORD }}"
+          GIT_AUTHORIZATION: "${{ secrets.GIT_AUTHORIZATION }}"
+          DEVELOPER_APP_ID: "${{ secrets.APPLE_DEVELOPER_APP_ID }}"
+          DEVELOPER_APP_IDENTIFIER: "${{ secrets.PACKAGE_NAME }}"
+          APP_STORE_CONNECT_TEAM_ID: "${{ secrets.APP_STORE_CONNECT_TEAM_ID }}"
+          DEVELOPER_PORTAL_TEAM_ID: "${{ secrets.APPLE_DEVELOPER_PORTAL_TEAM_ID }}"
+          PROVISIONING_PROFILE_SPECIFIER: "${{ secrets.PACKAGE_NAME }}"
+          KEY_ID: "${{secrets.APPLE_KEY_ID}}"
+          ISSUER_ID: "${{secrets.APPLE_ISSUER_ID}}"
+          KEY_CONTENT: "${{secrets.APPLE_KEY_CONTENT}}"
+
+  send_notification:
+    name: Notify new build
+    runs-on: ubuntu-latest
+    needs: deploy_ios
+    steps:
+      - name: Notify by Telegram
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          args: The new version for iOS released on Testflight 🙆‍♂️🙆‍♀️
