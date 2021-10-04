@@ -1,14 +1,14 @@
 name: Planté Android distribute
 on:
   push:
-    branches: [ main, release/* ]
+    branches: [main, release/*]
     commit-ignore:
-      - [ skip ci ]
-      - [ ci skip ]
+      - [skip ci]
+      - [ci skip]
 
 jobs:
   build_apk:
-    name: Distribute beta build with Telegram
+    name: Build app for Android
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code from ref
@@ -28,7 +28,7 @@ jobs:
       - name: Run Flutter tasks
         uses: subosito/flutter-action@v1
         with:
-          flutter-version: "2.2.3"
+          channel: "stable"
       - name: Install dependancies for Flutter
         run: flutter pub get
       - name: Flutter build bundle android app
