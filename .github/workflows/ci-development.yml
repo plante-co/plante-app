@@ -1,4 +1,4 @@
-name: Planté build test
+name: Planté Build test
 on:
   pull_request:
     branches: [develop]
@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    name: Distribute beta build with Telegram
+    name: Build for Android and iOS
     runs-on: macos-latest
     steps:
       - name: Checkout code from ref
@@ -28,7 +28,7 @@ jobs:
       - name: Run Flutter tasks
         uses: subosito/flutter-action@v1
         with:
-          flutter-version: "2.2.3"
+          channel: "stable"
       - name: Install dependancies for Flutter
         run: flutter pub get
       - name: Flutter build bundle android app

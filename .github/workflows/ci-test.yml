@@ -1,4 +1,5 @@
-name: Planté build test
+name: Planté Build test for Android
+ 
 on:
   push:
     branches: [feature/**, hotfix/**]
